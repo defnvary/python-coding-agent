@@ -1,15 +1,15 @@
 import os
 
-def get_files_info(working_directory, directory="."):
+def get_files_info(work_dir, dir="."):
     try:
-        abs_work_dir = os.path.abspath(working_directory)
-        target_dir = os.path.normpath(os.path.join(abs_work_dir, directory))
+        abs_work_dir = os.path.abspath(work_dir)
+        target_dir = os.path.normpath(os.path.join(abs_work_dir, dir))
 
         if os.path.commonpath([abs_work_dir, target_dir]) != abs_work_dir:
-            return f"Error: Cannot list {directory} as it is outside the permitted work dir"
+            return f"Error: Cannot list {dir} as it is outside the permitted work directory"
 
         if not os.path.isdir(target_dir):
-            return f"Error: '{directory}' is not a directory"
+            return f"Error: '{dir}' is not a directory"
 
         files_info = []
 
