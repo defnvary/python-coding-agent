@@ -1,4 +1,5 @@
 import os
+from ..config import BUFFER_SIZE_MAX
 
 def get_file_content(work_dir, file_path):
     abs_work_dir = os.path.abspath(work_dir)
@@ -13,7 +14,7 @@ def get_file_content(work_dir, file_path):
     try:
         with open(target_file, "r") as file:
             content = ""
-            for ch in file.read(10000):
+            for ch in file.read(BUFFER_SIZE_MAX):
                 content += ch
         
             return content
