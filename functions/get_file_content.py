@@ -2,7 +2,7 @@ import os
 
 def get_file_content(work_dir, file_path):
     abs_work_dir = os.path.abspath(work_dir)
-    target_file = os.path.normpath(os.path.join(abs_work_dir, file_path));
+    target_file = os.path.normpath(os.path.join(abs_work_dir, file_path))
 
     if os.path.commonpath([abs_work_dir, target_file]) != abs_work_dir:
         return f"Error: Cannot read '{file_path}' as it is outside the permitted working directory"
