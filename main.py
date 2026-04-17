@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from functions.get_files_info import get_files_info
+from prompt import system_prompt
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -27,6 +28,7 @@ def main():
     response = client.models.generate_content(
         model="gemini-3-flash-preview",
         contents=messages,
+        config=types.GenerateContentConfig(system_instruction=system_prompt),
     )
     
     # print(f"API Key: {api_key}")
@@ -40,5 +42,4 @@ def main():
             print(f"User prompt: {messages[-1].parts[0].text}")
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
-
-print(get_files_info("calculator"))
+main()
