@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 
 def run_python_file(working_directory, file_path, args=None):
@@ -8,13 +9,13 @@ def run_python_file(working_directory, file_path, args=None):
     target_file = os.path.normpath(os.path.join(abs_work_dir, file_path))
 
     if not os.path.commonpath([abs_work_dir, target_file]) == abs_work_dir:
-        return f"Cannot execute \"{file_path}\" as it is outside the permitted working directory"
+        return f'Cannot execute "{file_path}" as it is outside the permitted working directory'
 
     if not os.path.isfile(target_file):
-        return f"Error: \"{file_path}\" does not exists or is not a regular file"
+        return f'Error: "{file_path}" does not exists or is not a regular file'
 
-    if target_file[len(target_file) - 2:] != "py":
-        return f"Error: \"{file_path}\" is not a Python file."
+    if target_file[len(target_file) - 2 :] != "py":
+        return f'Error: "{file_path}" is not a Python file.'
 
     command = ["python", target_file]
 
@@ -23,22 +24,43 @@ def run_python_file(working_directory, file_path, args=None):
             command.append(arg)
 
     try:
-        completed_process = subprocess.run(command, cwd=abs_work_dir, capture_output=True, text=True, timeout=30)
-        #print(completed_process)
+        completed_process = subprocess.run(
+            command, cwd=abs_work_dir, capture_output=True, text=True, timeout=30
+        )
+        # print(completed_process)
         std_out = completed_process.stdout
         std_err = completed_process.stderr
         return_code = completed_process.returncode
-    
+
         if return_code != 0:
             return f"Process ended with code {return_code}"
-        
-        if std_out == '' and std_err == '':
+
+        if std_out == "" and std_err == "":
             return "No output produced"
 
-        if std_err != '':
+        if std_err != "":
             return f"STDERR: \n{std_err}"
 
         return f"STDOUT:\n{std_out}"
 
     except Exception as e:
         return f"Error: {e}"
+
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="run the file with python interpreter, accepts additional CLI arguments as optional array",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path of the file to be executed using python, relative to working directory",
+            ),
+            "args": types.Schema(
+                type=types.Type.STRING,
+                description="Optional arguments",
+            ),
+        },
+    ),
+)
