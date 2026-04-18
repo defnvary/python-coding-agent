@@ -27,7 +27,7 @@ def get_file_content(work_dir, file_path):
 
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
-    description="Read content of file in a specified path relative to the working directory, returns string",
+    description="get the contents of file (i.e. read the file) in a specified path relative to the working directory",
     parameters=types.Schema(
         type=types.Type.OBJECT,
         properties={
