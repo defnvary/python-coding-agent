@@ -5,6 +5,7 @@ from google import genai
 from google.genai import types
 from prompt import system_prompt
 from call_function import available_functions, call_function
+from config import MODEL_NAME, MAX_ITER
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -25,9 +26,9 @@ def main():
         types.Content(role="user", parts=[types.Part(text=prompt)]),
     ]
 
-    for _ in range(10):
+    for _ in range(MAX_ITER):
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=MODEL_NAME,
             contents=messages,
             config=types.GenerateContentConfig(
                 system_instruction=system_prompt, tools=[available_functions]
